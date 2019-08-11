@@ -23,6 +23,9 @@ Once cloned, since it is spring boot app, create a JAR out of it, you could gene
 java -jar <jarffileName>
 ```
 [How to run Spring boot App](https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-running-your-application.html)
+
+### Usage
+
 ## Built With
 
 * [Maven](https://maven.apache.org/) - Dependency Management
