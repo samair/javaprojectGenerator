@@ -1,6 +1,4 @@
-# Project Title
-
-Java Maven Project Generator
+# Java Project Generator
 
 ## Getting Started
 
@@ -8,53 +6,22 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+You need to have maven installed, since it uses maven invoker to generate maven based java projects.
 
-```
-Give examples
-```
+
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
+Clone this repository
 ```
-Give the example
+git clone -s https://github.com/samair/javaprojectGenerator.git
 ```
 
-And repeat
+Once cloned, since it is spring boot app, create a JAR out of it, you could generate a snapshot and run.
 
 ```
-until finished
+java -jar <jarffileName>
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
 
 ## Built With
 
@@ -63,7 +30,7 @@ Add additional notes about how to deploy this on a live system
 
 ## Authors
 
-* **Sameer Chandra** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Sameer Chandra** 
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
