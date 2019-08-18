@@ -38,7 +38,7 @@ public class MavenGeneratorController {
 	@GetMapping("/test")
 	public String createFile() throws IOException {
 		String code =  genService.generate();
-		File file = new File("/tmp/MyClass.java");
+		File file = new File("/app/MyClass.java");
 		FileWriter fileWriter = new FileWriter(file);
 		fileWriter.write(code);
 		fileWriter.flush();
