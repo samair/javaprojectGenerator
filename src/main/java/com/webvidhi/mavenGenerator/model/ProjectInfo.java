@@ -26,11 +26,11 @@ public class ProjectInfo {
 		this.javaVersion = javaVersion;
 	}
 
-	public boolean isSpringBootApp() {
+	public boolean getIsSpringBootApp() {
 		return isSpringBootApp;
 	}
 
-	public void setSpringBootApp(boolean isSpringBootApp) {
+	public void setIsSpringBootApp(boolean isSpringBootApp) {
 		this.isSpringBootApp = isSpringBootApp;
 	}
 

@@ -67,7 +67,7 @@ public class MavenService {
 		
 		
 		String zipFileName = generateProject()+".zip";
-		if (this.prjInfo.isSpringBootApp()) {
+		if (this.prjInfo.getIsSpringBootApp()) {
 			updatePom();
 		}
 		FileOutputStream fos = new FileOutputStream(zipFileName);
@@ -124,6 +124,28 @@ public class MavenService {
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			
 			Document document = documentBuilder.parse(xmlFile);
+			
+			
+			
+			//First add parent POM 
+			Element projectElement = (Element) document.getElementsByTagName("project").item(0);
+			Element pGroupId = document.createElement("groupId");
+			pGroupId.setTextContent("org.springframework.boot");
+			Element pArtifactId = document.createElement("artifactId");
+			pArtifactId.setTextContent("spring-boot-starter-parent");
+			Element relativePath = document.createElement("relativePath");
+			//relativePath.setTextContent("spring-boot-starter-parent");
+			Element version = document.createElement("version");
+			version.setTextContent("2.1.7.RELEASE");
+			Element nodeParent = document.createElement("parent");
+			nodeParent.appendChild(pGroupId);
+			nodeParent.appendChild(pArtifactId);
+			nodeParent.appendChild(version);
+			nodeParent.appendChild(relativePath);
+			projectElement.appendChild(nodeParent);
+			
+			
+			//Now add dependencies
 			Element documentElement = (Element) document.getElementsByTagName("dependencies").item(0) ;
 			//document.getDocumentElement();
 			System.out.println("found: "+documentElement.getNodeName());
@@ -137,7 +159,7 @@ public class MavenService {
 			Element nodeElement = document.createElement("dependency");
 			nodeElement.appendChild(textNode);
 			nodeElement.appendChild(textNode1);
-			
+
 			documentElement.appendChild(nodeElement);
 			//document.replaceChild(documentElement, documentElement);
 			Transformer tFormer = 
@@ -147,6 +169,7 @@ public class MavenService {
 			Result result = new StreamResult(xmlFile);
 			tFormer.transform(source, result);
 
+			
 
 			} catch (Exception ex) {
 			System.out.println(ex.getMessage());

@@ -34,7 +34,7 @@ public class MavenGeneratorController {
     public void updateProjectInfo(@RequestBody ProjectInfo pInfo) {
 		System.out.println("Project Info: "+ pInfo.getArtifactName());
 		System.out.println("Project Info: "+ pInfo.getGroupName());
-		System.out.println("Project Info: "+ pInfo.isSpringBootApp());
+		System.out.println("Project Info: "+ pInfo.getIsSpringBootApp());
 		mvnService.setProjectInfo(pInfo);
 		
 	}
