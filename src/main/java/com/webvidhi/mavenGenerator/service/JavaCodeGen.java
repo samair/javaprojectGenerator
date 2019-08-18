@@ -30,9 +30,9 @@ public class JavaCodeGen {
 		        .setPublic(true);
 		myClass.addField(int.class, "A_CONSTANT", Modifier.Keyword.PUBLIC, Modifier.Keyword.STATIC);
 		myClass.addField(String.class, "name",  Modifier.Keyword.PRIVATE);
-		ImportDeclaration imports = new ImportDeclaration("org.doublecloud.parserdemo", false, false);
+	//	ImportDeclaration imports = new ImportDeclaration("org.doublecloud.parserdemo", false, false);
 		//imports.setName(new NameExpr("org.doublecloud.parserdemo.*"));
-		compilationUnit.setImport(0, imports);
+	//	compilationUnit.setImport(0, imports);
 		return myClass.toString();
 	}
 	
