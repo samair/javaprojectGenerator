@@ -28,7 +28,7 @@ public class JavaCodeGen {
 		ClassOrInterfaceDeclaration myClass = compilationUnit
 		        .addClass("MyClass")
 		        .setPublic(true);
-		myClass.addField(int.class, "A_CONSTANT", Modifier.Keyword.PUBLIC, Modifier.Keyword.STATIC);
+		myClass.addField(int.class, "B_CONSTANT", Modifier.Keyword.PUBLIC, Modifier.Keyword.STATIC);
 		myClass.addField(String.class, "name",  Modifier.Keyword.PRIVATE);
 	//	ImportDeclaration imports = new ImportDeclaration("org.doublecloud.parserdemo", false, false);
 		//imports.setName(new NameExpr("org.doublecloud.parserdemo.*"));
