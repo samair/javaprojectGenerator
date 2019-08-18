@@ -1,6 +1,7 @@
 package com.webvidhi.mavenGenerator.controller;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.webvidhi.mavenGenerator.model.ProjectInfo;
+import com.webvidhi.mavenGenerator.service.JavaCodeGen;
 import com.webvidhi.mavenGenerator.service.MavenService;
 @CrossOrigin
 @RestController
@@ -29,6 +31,20 @@ public class MavenGeneratorController {
 	
 	@Autowired
 	MavenService mvnService;
+	
+	@Autowired
+	JavaCodeGen genService;
+	
+	@GetMapping("/test")
+	public String createFile() throws IOException {
+		String code =  genService.generate();
+		File file = new File("MyClass.java");
+		FileWriter fileWriter = new FileWriter(file);
+		fileWriter.write(code);
+		fileWriter.flush();
+		fileWriter.close();
+		return code;
+	}
 	
 	@PostMapping("/setInfo")
     public void updateProjectInfo(@RequestBody ProjectInfo pInfo) {

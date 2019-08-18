@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.springframework.stereotype.Service;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Modifier;
@@ -13,6 +15,8 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 /*
  * Code Generator for Java, it uses JavaParser 
  */
+
+@Service
 
 public class JavaCodeGen {
 	
