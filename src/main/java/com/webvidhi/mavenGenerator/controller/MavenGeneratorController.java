@@ -38,7 +38,7 @@ public class MavenGeneratorController {
 	@GetMapping("/test")
 	public ResponseEntity<Resource> createFile() throws Exception {
 		String code = genService.generate();
-		File file = new File(genService.folder+"\\MyClass.java");
+		File file = new File(genService.folder+"/MyClass.java");
 		FileWriter fileWriter = new FileWriter(file);
 		fileWriter.write(code);
 		fileWriter.flush();

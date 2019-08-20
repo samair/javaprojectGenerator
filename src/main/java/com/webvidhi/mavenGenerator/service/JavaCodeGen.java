@@ -98,7 +98,7 @@ public class JavaCodeGen {
 		Files.createDirectories(resPath);
 		
 		
-		File file = new File(resPath+"\\application.properties");
+		File file = new File(resPath+"/application.properties");
 		FileWriter appProp = new FileWriter(file);
 		appProp.write("");
 		appProp.flush();
