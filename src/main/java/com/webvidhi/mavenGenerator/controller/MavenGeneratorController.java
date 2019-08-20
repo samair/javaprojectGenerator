@@ -38,6 +38,7 @@ public class MavenGeneratorController {
 	@GetMapping("/test")
 	public ResponseEntity<Resource> createFile() throws Exception {
 		String code = genService.generate();
+		File zipFile = new File(genService.projfolder);
 		File file = new File(genService.folder+"/MyClass.java");
 		FileWriter fileWriter = new FileWriter(file);
 		fileWriter.write(code);
@@ -51,7 +52,7 @@ public class MavenGeneratorController {
 		header.add("Pragma", "no-cache");
 		header.add("Expires", "0");
 
-		Path path = Paths.get(file.getAbsolutePath());
+		Path path = Paths.get(zipFile.getAbsolutePath());
 		ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
 		return ResponseEntity.ok().headers(header).contentLength(file.length())
