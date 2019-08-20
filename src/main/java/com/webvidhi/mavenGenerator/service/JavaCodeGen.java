@@ -55,6 +55,12 @@ public class JavaCodeGen {
 	    	
 	    	projResFolder = projfolder + "\\src\\main\\resources";
 	    }
+	    else {
+	    	folder=folder+"/Generated_/projectName";
+	    	projfolder = folder;
+	    	folder = folder+"/src/main/java/org/package/name";
+	    	projResFolder = projfolder + "/src/main/resources";
+	    }
 	    		
 		//Create temporary folders for the package
 	    Path path = Paths.get(folder);
