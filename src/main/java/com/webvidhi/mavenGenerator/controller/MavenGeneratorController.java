@@ -36,35 +36,31 @@ public class MavenGeneratorController {
 	JavaCodeGen genService;
 	
 	@GetMapping("/test")
-	public ResponseEntity<Resource> createFile() throws IOException {
-		String code =  genService.generate();
-		File file = new File("/app/MyClass.java");
+	public ResponseEntity<Resource> createFile() throws Exception {
+		String code = genService.generate();
+		File file = new File(genService.folder+"\\MyClass.java");
 		FileWriter fileWriter = new FileWriter(file);
 		fileWriter.write(code);
 		fileWriter.flush();
 		fileWriter.close();
-		String contentHeader = "attachment; filename="+"MyClass.java";
-		   HttpHeaders header = new HttpHeaders();
-	        header.add(HttpHeaders.CONTENT_DISPOSITION, contentHeader);
-	        header.add("Cache-Control", "no-cache, no-store, must-revalidate");
-	        header.add("Pragma", "no-cache");
-	        header.add("Expires", "0");
+		genService.createProjectZip();
+		String contentHeader = "attachment; filename=" + "MyClass.zip";
+		HttpHeaders header = new HttpHeaders();
+		header.add(HttpHeaders.CONTENT_DISPOSITION, contentHeader);
+		header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+		header.add("Pragma", "no-cache");
+		header.add("Expires", "0");
 
-	        Path path = Paths.get(file.getAbsolutePath());
-	        ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+		Path path = Paths.get(file.getAbsolutePath());
+		ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
-	        return ResponseEntity.ok()
-	                .headers(header)
-	                .contentLength(file.length())
-	                .contentType(MediaType.parseMediaType("application/octet-stream"))
-	                .body(resource);
+		return ResponseEntity.ok().headers(header).contentLength(file.length())
+				.contentType(MediaType.parseMediaType("application/octet-stream")).body(resource);
 	}
 	
 	@PostMapping("/setInfo")
     public void updateProjectInfo(@RequestBody ProjectInfo pInfo) {
-		System.out.println("Project Info: "+ pInfo.getArtifactName());
-		System.out.println("Project Info: "+ pInfo.getGroupName());
-		System.out.println("Project Info: "+ pInfo.getIsSpringBootApp());
+
 		mvnService.setProjectInfo(pInfo);
 		
 	}
