@@ -23,6 +23,7 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.webvidhi.mavenGenerator.model.ProjectInfo;
 
 /*
  * Code Generator for Java, it uses JavaParser 
@@ -31,6 +32,8 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 @Service
    
 public class JavaCodeGen {
+	
+	private ProjectInfo prjInfo;
 	
 	public String folder ;
     
@@ -67,19 +70,17 @@ public class JavaCodeGen {
 		Files.createDirectories(path);
 		CompilationUnit compilationUnit = new CompilationUnit();
 		compilationUnit.addImport("org.springframework.boot.SpringApplication");
-		compilationUnit.setPackageDeclaration("org.webvidi.test");
+		compilationUnit.setPackageDeclaration(prjInfo.getGroupName());
 		
 		
 		ClassOrInterfaceDeclaration myClass = compilationUnit
 		        .addClass("MyClass")
 		        .setPublic(true);
 		
-		myClass.addField(int.class, "B_CONSTANT", Modifier.Keyword.PUBLIC, Modifier.Keyword.STATIC);
-		myClass.addField(String.class, "name",  Modifier.Keyword.PRIVATE);
-		MethodDeclaration  mainMethod = myClass.addMethod("main", Modifier.Keyword.PUBLIC,Modifier.Keyword.STATIC);
+	    MethodDeclaration  mainMethod = myClass.addMethod("mohit", Modifier.Keyword.PUBLIC,Modifier.Keyword.STATIC);
 		
 		mainMethod.addAndGetParameter(String[].class,"args");
-		mainMethod.setBlockComment("Generated code by Sameer");
+		mainMethod.setBlockComment("Generated code by *javaCodeGen*");
 		
 		NameExpr nameExpr = new NameExpr("SpringApplication");
 		MethodCallExpr methodCallExpr = new MethodCallExpr(nameExpr, "run");
@@ -96,17 +97,34 @@ public class JavaCodeGen {
 	    Path resPath = Paths.get(projResFolder);
 	    
 		Files.createDirectories(resPath);
-		
-		
-		File file = new File(resPath+"/application.properties");
-		FileWriter appProp = new FileWriter(file);
+		File file = null;
+		File pom = null;
+		 if (System.getProperty("os.name").contains("Windows")) {
+			 file = new File(resPath+"\\application.properties");
+			 pom = new File(projfolder+"\\pom.xml");
+		 }
+		 else {
+			 file = new File(resPath+"/application.properties");
+			 pom = new File(projfolder+"/pom.xml");
+			 
+		 }
+		FileWriter appProp = new FileWriter(file);		
 		appProp.write("");
 		appProp.flush();
 		appProp.close();
 		
+		FileWriter appPom = new FileWriter(pom);		
+		appPom.write("");
+		appPom.flush();
+		appPom.close();
+		
 		
 		return compilationUnit.toString();
 		
+	}
+	public void setProjectInfo(ProjectInfo info) {
+		
+		this.prjInfo = info;
 	}
 	
 	public String createProjectZip() throws Exception {
@@ -114,7 +132,7 @@ public class JavaCodeGen {
 		//first generate project 
 		
 		
-		String zipFileName = "projectName"+".zip";
+		String zipFileName = prjInfo.getArtifactName()+".zip";
 		
 
 		FileOutputStream fos = new FileOutputStream(zipFileName);
@@ -155,7 +173,7 @@ public class JavaCodeGen {
 	        while ((length = fis.read(buffer)) > 0) {
 	            zos.write(buffer, 0, length);
 	        }
-	        zos.closeEntry();
+	        zos.closeEntry();	        
 	        fis.close();
 	    }
 	}

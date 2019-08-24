@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.webvidhi.mavenGenerator.model.ProjectInfo;
@@ -32,20 +33,35 @@ public class MavenGeneratorController {
 	@Autowired
 	MavenService mvnService;
 	
-	@Autowired
-	JavaCodeGen genService;
+
 	
-	@GetMapping("/test")
-	public ResponseEntity<Resource> createFile() throws Exception {
+	
+	@PostMapping("/v1/maven")
+	public ResponseEntity<Resource> createFile(@RequestBody ProjectInfo info) throws Exception {
+		JavaCodeGen genService = new JavaCodeGen();
+		genService.setProjectInfo(info);
 		String code = genService.generate();
-		File zipFile = new File("./projectName.zip");
-		File file = new File(genService.folder+"/MyClass.java");
+		
+		File zipFile = new File(info.getArtifactName()+".zip");
+		File file = null;
+		String mainClassName = info.getArtifactName() +"Application.java";
+		if (System.getProperty("os.name").contains("Windows")) {
+			file = new File(genService.folder+"\\"+mainClassName); 
+			System.out.println("Path :"+genService.folder);
+			
+		}
+		else {
+			file = new File(genService.folder+"/"+mainClassName); 
+		}
+		
 		FileWriter fileWriter = new FileWriter(file);
 		fileWriter.write(code);
 		fileWriter.flush();
 		fileWriter.close();
 		genService.createProjectZip();
-		String contentHeader = "attachment; filename=" + "MyClass.zip";
+		
+		String contentHeader = "attachment; filename=" + info.getArtifactName()+".zip";
+		
 		HttpHeaders header = new HttpHeaders();
 		header.add(HttpHeaders.CONTENT_DISPOSITION, contentHeader);
 		header.add("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -55,7 +71,7 @@ public class MavenGeneratorController {
 		Path path = Paths.get(zipFile.getAbsolutePath());
 		ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
-		return ResponseEntity.ok().headers(header).contentLength(file.length())
+		return ResponseEntity.ok().headers(header).contentLength(zipFile.length())
 				.contentType(MediaType.parseMediaType("application/octet-stream")).body(resource);
 	}
 	
