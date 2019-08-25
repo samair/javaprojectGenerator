@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -17,12 +18,9 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.webvidhi.mavenGenerator.model.ProjectInfo;
 
 /*
@@ -48,23 +46,29 @@ public class JavaCodeGen {
 		//Check if windows or linux
 		System.out.println("OS: "+System.getProperty("os.name"));
 		folder = System.getProperty("user.dir");
+	    StringTokenizer stringToken = new StringTokenizer(prjInfo.getGroupName(),".");
+		
+		String delim = "/";
 		
 	    if (System.getProperty("os.name").contains("Windows")) {
-	    	
-	    	System.out.println();
-	    	folder = folder+"\\Generated_"+"\\projectName";
-	    	projfolder = folder;
-	    	folder = folder+"\\src\\main\\java\\org\\package\\name";
-	    	
-	    	projResFolder = projfolder + "\\src\\main\\resources";
+	    	delim ="\\";
 	    }
-	    else {
-	    	folder=folder+"/Generated_/projectName";
-	    	projfolder = folder;
-	    	folder = folder+"/src/main/java/org/package/name";
-	    	projResFolder = projfolder + "/src/main/resources";
-	    }
-	    		
+	    	
+
+    	projfolder = folder+delim+"Generated_"+delim+prjInfo.getArtifactName();
+    	folder = folder+delim+"Generated_"+delim+prjInfo.getArtifactName()+delim+"src" +delim+"main"+delim+"java";
+    	StringBuilder bld = new StringBuilder();
+    	
+    	while(stringToken.hasMoreTokens()) {
+       		bld.append(delim);
+    		bld.append(stringToken.nextToken());
+    
+    		
+    	}
+    	folder = folder + bld.toString();
+    	System.out.println("folder: "+folder);
+    	projResFolder = projfolder + delim+"src" +delim+"main"+delim+"resources";
+	    				
 		//Create temporary folders for the package
 	    Path path = Paths.get(folder);
 		Files.createDirectories(path);
@@ -74,17 +78,17 @@ public class JavaCodeGen {
 		
 		
 		ClassOrInterfaceDeclaration myClass = compilationUnit
-		        .addClass("MyClass")
+		        .addClass(prjInfo.getArtifactName() +"Application.java")
 		        .setPublic(true);
 		
-	    MethodDeclaration  mainMethod = myClass.addMethod("mohit", Modifier.Keyword.PUBLIC,Modifier.Keyword.STATIC);
+	    MethodDeclaration  mainMethod = myClass.addMethod("main", Modifier.Keyword.PUBLIC,Modifier.Keyword.STATIC);
 		
 		mainMethod.addAndGetParameter(String[].class,"args");
-		mainMethod.setBlockComment("Generated code by *javaCodeGen*");
+		mainMethod.setBlockComment("Generated code by javaCodeGen");
 		
 		NameExpr nameExpr = new NameExpr("SpringApplication");
 		MethodCallExpr methodCallExpr = new MethodCallExpr(nameExpr, "run");
-		methodCallExpr.addArgument("MyClass.class");
+		methodCallExpr.addArgument(prjInfo.getArtifactName() +"Application"+".class");
 		methodCallExpr.addArgument("args");
 		
 		BlockStmt blockStmt = new BlockStmt();
@@ -93,7 +97,7 @@ public class JavaCodeGen {
 
 		mainMethod.setBody(blockStmt);
 		
-	    // Cretae properties file
+	    // Create properties file
 	    Path resPath = Paths.get(projResFolder);
 	    
 		Files.createDirectories(resPath);
