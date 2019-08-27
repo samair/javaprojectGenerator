@@ -107,4 +107,10 @@ public class MavenGeneratorController {
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(resource);
 	}
+	
+	 @GetMapping(path = "/test")
+	    public void httpGET() {
+		 System.out.println("TEST!!");
+	    }
+	
 }
